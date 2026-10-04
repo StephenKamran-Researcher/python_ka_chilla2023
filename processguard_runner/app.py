@@ -101,7 +101,8 @@ def call_model(case, arch):
       "model": MODEL,
       "messages": messages(case, arch),
       "temperature": 0.2,
-      "max_completion_tokens": 72,
+      "max_completion_tokens": 256,
+      "include_reasoning": false,
       "response_format": {"type":"json_object"}
     }
     headers = {"Authorization":"Bearer "+API_KEY, "Content-Type":"application/json"}
@@ -114,7 +115,8 @@ def call_model(case, arch):
             wait = float(r.headers.get("retry-after","3"))
             time.sleep(max(wait,2.2))
             continue
-        r.raise_for_status()
+        if r.status_code >= 400:
+            raise RuntimeError("Groq API "+str(r.status_code)+": "+r.text[:1200])
         txt = r.json()["choices"][0]["message"]["content"]
         return txt
 
