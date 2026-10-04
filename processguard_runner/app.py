@@ -102,7 +102,7 @@ def call_model(case, arch):
       "messages": messages(case, arch),
       "temperature": 0.2,
       "max_completion_tokens": 256,
-      "include_reasoning": false,
+      "include_reasoning": False,
       "response_format": {"type":"json_object"}
     }
     headers = {"Authorization":"Bearer "+API_KEY, "Content-Type":"application/json"}
