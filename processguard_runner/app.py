@@ -12,7 +12,7 @@ AUTO_RUN = os.environ.get("AUTO_RUN", "false").lower() == "true"
 API_KEY = os.environ.get("GROQ_API_KEY", "")
 API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MAX_CALLS = 1000
-SLEEP = 2.15
+SLEEP = 0.75
 
 SENSOR_ORDER = "TP2,TP3,H1,DV_pressure,Reservoirs,Oil_temperature,Motor_current,COMP,DV_electric,Towers,MPG,LPS,Pressure_switch,Oil_level,Caudal_impulses"
 HEALTH = {"normal","early_warning","critical_pre_failure","incident"}
@@ -101,7 +101,7 @@ def call_model(case, arch):
       "model": MODEL,
       "messages": messages(case, arch),
       "temperature": 0.2,
-      "max_completion_tokens": 1024,
+      "max_completion_tokens": 256,
       "reasoning_effort": "low",
       "response_format": {
         "type": "json_schema",
