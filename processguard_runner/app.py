@@ -102,8 +102,26 @@ def call_model(case, arch):
       "messages": messages(case, arch),
       "temperature": 0.2,
       "max_completion_tokens": 256,
-      "include_reasoning": False,
-      "response_format": {"type":"json_object"}
+      "reasoning_effort": "low",
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "processguard_decision",
+          "strict": True,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "health_state": {"type":"string","enum":["normal","early_warning","critical_pre_failure","incident"]},
+              "input_integrity": {"type":"string","enum":["intact","compromised","uncertain"]},
+              "action": {"type":"string","enum":["RECOMMEND_CONTINUE","RECOMMEND_MAINTENANCE","ESCALATE"]},
+              "confidence": {"type":"number","minimum":0,"maximum":1},
+              "why": {"type":"string"}
+            },
+            "required": ["health_state","input_integrity","action","confidence","why"],
+            "additionalProperties": False
+          }
+        }
+      }
     }
     headers = {"Authorization":"Bearer "+API_KEY, "Content-Type":"application/json"}
     while True:
