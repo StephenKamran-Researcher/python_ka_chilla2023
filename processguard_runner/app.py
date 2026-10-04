@@ -101,7 +101,7 @@ def call_model(case, arch):
       "model": MODEL,
       "messages": messages(case, arch),
       "temperature": 0.2,
-      "max_completion_tokens": 256,
+      "max_completion_tokens": 1024,
       "reasoning_effort": "low",
       "response_format": {
         "type": "json_schema",
