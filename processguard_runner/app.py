@@ -101,7 +101,7 @@ def call_model(case, arch):
       "model": MODEL,
       "messages": messages(case, arch),
       "temperature": 0.2,
-      "max_completion_tokens": 256,
+      "max_completion_tokens": 512,
       "reasoning_effort": "low",
       "response_format": {
         "type": "json_schema",
@@ -132,6 +132,10 @@ def call_model(case, arch):
         if r.status_code == 429:
             wait = float(r.headers.get("retry-after","3"))
             time.sleep(max(wait,2.2))
+            continue
+        if r.status_code == 400 and "json_validate_failed" in r.text:
+            payload["max_completion_tokens"] = 1024
+            time.sleep(1.0)
             continue
         if r.status_code >= 400:
             raise RuntimeError("Groq API "+str(r.status_code)+": "+r.text[:1200])
